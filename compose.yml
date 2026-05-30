@@ -1,18 +1,27 @@
----
-version: "3"
-services:
- devopsdb:
-   image: saichandrakiran/automation:db
-   ports:
-     - "3306:3306"
-   deploy:
-     replicas: 3
+version: "3.9"
 
- application:
-   image: saichandrakiran/automation:app
-   ports:
-     - "1111:8080"
-   deploy:
-     replicas: 3
-   depends_on:
-     - "devopsdb"
+services:
+  devopsdb:
+    image: saichandrakiran/automation:db
+    ports:
+      - "3306:3306"
+    deploy:
+      replicas: 3
+    networks:
+      - automation_network
+
+  application:
+    image: saichandrakiran/automation:app
+    ports:
+      - "1111:8080"
+    deploy:
+      replicas: 3
+    depends_on:
+      - devopsdb
+    networks:
+      - automation_network
+
+networks:
+  automation_network:
+    driver: overlay
+    attachable: true
